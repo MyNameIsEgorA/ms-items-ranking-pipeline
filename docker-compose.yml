@@ -1,0 +1,31 @@
+services:
+  meilisearch:
+    image: getmeili/meilisearch:v1.13
+    container_name: product-ranking-meilisearch
+    restart: unless-stopped
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: local-master-key
+    ports:
+      - "7700:7700"
+    volumes:
+      - meili_data:/meili_data
+
+  app:
+    build: .
+    container_name: product-ranking-api
+    restart: unless-stopped
+    depends_on:
+      - meilisearch
+    environment:
+      APP_MEILI_URL: http://meilisearch:7700
+      APP_MEILI_MASTER_KEY: local-master-key
+      APP_DATA_DIR: /app/data_dumps
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data_dumps:/app/data_dumps
+
+volumes:
+  meili_data:
+

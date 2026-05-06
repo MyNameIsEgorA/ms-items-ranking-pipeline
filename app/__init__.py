@@ -1,0 +1,2 @@
+"""Product ranking service."""
+
