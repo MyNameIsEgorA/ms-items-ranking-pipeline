@@ -99,12 +99,10 @@ class ProductEventAggregate:
     views: int = 0
     purchases: int = 0
     first_seen_at: datetime | None = None
-    last_seen_age_days: float = 10**9
 
     def register_seen(self, event_time: datetime, age_days: float) -> None:
         if self.first_seen_at is None or event_time < self.first_seen_at:
             self.first_seen_at = event_time
-        self.last_seen_age_days = min(self.last_seen_age_days, age_days)
 
 
 def normalize_gender(value: Any) -> str:
@@ -157,6 +155,22 @@ def parse_discount(price: float, old_price: float) -> float:
     if price <= 0 or old_price <= price:
         return 0.0
     return round((old_price - price) / old_price, 4)
+
+
+def catalog_created_at_from_season(season_code: str, fallback_tz: timezone | None) -> datetime | None:
+    match = re.fullmatch(r"(SS|AW|HO|FW|SU)-(\d{2})", clean_text(season_code).upper())
+    if not match:
+        return None
+    season, year_suffix = match.groups()
+    month_map = {"SS": 3, "SU": 6, "AW": 8, "FW": 9, "HO": 10}
+    return datetime(2000 + int(year_suffix), month_map.get(season, 6), 1, tzinfo=fallback_tz)
+
+
+def calculate_catalog_age_days(product: ProductAggregate, period_end: datetime) -> tuple[float, datetime]:
+    created_at = catalog_created_at_from_season(product.season, period_end.tzinfo)
+    if created_at is None:
+        return 180.0, period_end
+    return max((period_end - created_at).total_seconds() / 86400, 0.0), created_at
 
 
 def find_files(data_dir: Path, pattern: str) -> list[Path]:
@@ -635,8 +649,6 @@ class ProductRankingPipeline:
         return math.exp(-decay_lambda * age_days)
 
     def _category_boost(self, category_name: str) -> float:
-        if "куртк" in category_name.lower():
-            return 1.25
         return 1.0
 
     def _build_document(
@@ -656,11 +668,15 @@ class ProductRankingPipeline:
         in_stock = stock > 0
         category_name = choose_category(product.categories, product.product_type)
 
+        if metrics.first_seen_at is None:
+            raise ValueError(f"Product {product.product_id} has no event mention date")
+
+        age_days, created_at = calculate_catalog_age_days(product, period_end)
         purchases = int(metrics.purchases)
         popularity = (
             metrics.views * self.settings.popularity_view_weight
             + purchases * self.settings.popularity_purchase_weight
-        ) * self._decay(metrics.last_seen_age_days)
+        ) * self._decay(age_days)
         novelty = -math.log2((purchases + 1) / (total_purchases + 1)) if total_purchases > 0 else 0.0
         discount = parse_discount(price, old_price)
         is_sale = discount > 0 or any("распрод" in item.lower() or "sale" in item.lower() for item in product.categories)
@@ -677,9 +693,6 @@ class ProductRankingPipeline:
         final_score_1 = final_score
         final_score_2 = final_score
         final_score_3 = final_score
-
-        if metrics.first_seen_at is None:
-            raise ValueError(f"Product {product.product_id} has no event mention date")
 
         return ProductDocument(
             product_id=product.product_id,
@@ -705,7 +718,8 @@ class ProductRankingPipeline:
             final_score_1=round(final_score_1, 6),
             final_score_2=round(final_score_2, 6),
             final_score_3=round(final_score_3, 6),
-            created_at=metrics.first_seen_at,
+            age_days=round(age_days, 6),
+            created_at=created_at,
             url=product.url,
             image_url=product.image_url,
             barcodes=barcodes,

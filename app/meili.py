@@ -45,6 +45,7 @@ class MeiliClient:
                 "final_score_3",
                 "popularity",
                 "novelty",
+                "age_days",
                 "price",
                 "discount",
                 "stock",

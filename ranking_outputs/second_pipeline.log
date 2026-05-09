@@ -1,0 +1,111 @@
+======================================================================
+ KIXBOX RANKING PIPELINE - FULL EXECUTION
+======================================================================
+
+----------------------------------------------------------------------
+STAGE 0: RAW SOURCE AUDIT
+----------------------------------------------------------------------
+[Stage 0] Raw audit complete
+  Raw data dir: /app/runtime-data/Personalisation LAB 26
+  Event files scanned: 18
+  Derived as_of_date: 2026-04-26
+  Audit report: /app/runtime-data/artifacts/raw_audit_report.json
+
+----------------------------------------------------------------------
+STAGE 1: LOAD DATA
+----------------------------------------------------------------------
+[Stage 1] Loaded raw source tables
+  Shop rows: 56899
+  Categories rows: 0
+  Event JSON dir: /app/runtime-data/Personalisation LAB 26/customers-actions-new
+
+----------------------------------------------------------------------
+STAGE 2: CLEAN & NORMALIZE
+----------------------------------------------------------------------
+[Cleaner] Starting data cleaning pipeline...
+  Gender normalized ({'male': 11104, 'unisex': 6005, 'female': 2656, 'unknown': 36})
+  Categories extracted (123 unique)
+  Sale flag calculated (14487 products on sale)
+  Stock status calculated (13219 in stock)
+  Active candidate filter kept 13219 of 19801 products
+  Data types sanitized
+[Cleaner] Cleaning complete: 13219 products processed
+
+[Stage 2] Data cleaning complete
+  Products: 13219
+  Saved cleaned catalog: /app/runtime-data/artifacts/cleaned_catalog.csv
+  Gender distribution: {'male': 7483, 'unisex': 3736, 'female': 1968, 'unknown': 32}
+
+----------------------------------------------------------------------
+STAGE 3: CALCULATE SCORES
+----------------------------------------------------------------------
+[FeatureEngine] Starting scoring pipeline...
+[FeatureEngine] Event window: 2026-03-27 .. 2026-04-26
+[FeatureEngine] Events aggregated: 4091 products with views, 4091 products with purchases
+[FeatureEngine] Total catalog purchases: 6646
+[FeatureEngine] Products with views: 3580
+[FeatureEngine] Products with purchases: 2200
+[FeatureEngine] Scoring complete:
+  - Popularity range: 0.0000 - 42.4000
+  - Novelty range: 7.3409 - 12.6985
+  - Final score range: 0.000000 - 4.725929
+
+[Stage 3] Scoring complete
+  Products scored: 13219
+  Product daily events: /app/runtime-data/artifacts/event_product_daily.csv
+  Score event window: 2026-03-27 .. 2026-04-26
+  Saved scored catalog: /app/runtime-data/artifacts/scored_catalog.csv
+
+----------------------------------------------------------------------
+STAGE 4: INDEX TO MEILISEARCH
+----------------------------------------------------------------------
+[Orchestrator] Connecting to Meilisearch at http://meilisearch:7700...
+[Orchestrator] Connected to Meilisearch successfully
+
+============================================================
+SEARCH INDEXER PIPELINE
+============================================================
+[SearchIndexer] Preparing 13219 documents for indexing...
+[SearchIndexer] Prepared 13219 documents
+[SearchIndexer] Configuring Meilisearch index 'kixbox_products_runtime_baseline'...
+[SearchIndexer] Creating index 'kixbox_products_runtime_baseline' (primary key: 'id')...
+[SearchIndexer] Index settings applied:
+  - Filterable: ['product_id', 'category_id', 'category_name', 'brand', 'gender', 'price', 'is_new', 'is_sale', 'in_stock', 'current_on_site']
+  - Sortable: ['final_score', 'popularity', 'novelty', 'price', 'discount', 'age_days']
+  - Searchable: ['title', 'brand', 'article', 'category_name', 'product_types']
+
+[SearchIndexer] Importing 13219 documents...
+[SearchIndexer] Import complete:
+  - Task UID: 2
+  - Status: succeeded
+  - Documents indexed: 13219
+
+[SearchIndexer] Index 'kixbox_products_runtime_baseline' statistics:
+  - Number of documents: 13219
+  - Is indexing: False
+  - Primary key: id
+============================================================
+[SUCCESS] Indexing pipeline completed successfully
+============================================================
+[Stage 4] Indexed to Meilisearch successfully
+
+
+======================================================================
+ PIPELINE EXECUTION COMPLETE
+======================================================================
+
+Pipeline Summary:
+  Raw audit report: /app/runtime-data/artifacts/raw_audit_report.json
+  Derived as_of_date: 2026-04-26
+  Load mode: raw_sources
+  Score window: days=None, start=2026-03-27, end=2026-04-26
+  Score strategy: baseline
+  Seasonality enabled: False
+  Products cleaned: 13219
+  Scores calculated: 13219
+  Products indexed: 13219
+
+Score Statistics:
+  Popularity: min=0.0000, max=42.4000, mean=0.3576
+  Novelty: min=7.3409, max=12.6985, mean=12.4101
+  Final Score: min=0.000000, max=4.725929, mean=0.143328

@@ -61,6 +61,7 @@ class ProductDocument(BaseModel):
     final_score_1: float = 0.0
     final_score_2: float = 0.0
     final_score_3: float = 0.0
+    age_days: float = 0.0
     created_at: datetime
     url: str = ""
     image_url: str = ""

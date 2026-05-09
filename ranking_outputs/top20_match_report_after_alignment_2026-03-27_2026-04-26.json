@@ -1,0 +1,155 @@
+{
+  "period": {
+    "start": "2026-03-27T00:00:00+00:00",
+    "end": "2026-04-26T23:59:59+00:00"
+  },
+  "root_top20_file": "ranking_outputs/root_top20_final_score_after_alignment_2026-03-27_2026-04-26.json",
+  "second_top20_file": "ranking_outputs/second_top20_final_score_2026-03-27_2026-04-26.json",
+  "matches_count": 18,
+  "matches": [
+    {
+      "product_id": "1770640665",
+      "title": "Мужские Брюки Centipede Buckle Chino",
+      "root_rank": 17,
+      "root_final_score": 3.385718,
+      "second_rank": 12,
+      "second_final_score": 3.541479
+    },
+    {
+      "product_id": "1783114153",
+      "title": "Сумка Accessories In Plain Paper Touch Mixed",
+      "root_rank": 19,
+      "root_final_score": 3.329508,
+      "second_rank": 17,
+      "second_final_score": 3.363441
+    },
+    {
+      "product_id": "1783114169",
+      "title": "Рюкзак Accessories In Plain Paper Touch Mixed",
+      "root_rank": 1,
+      "root_final_score": 4.677716,
+      "second_rank": 1,
+      "second_final_score": 4.725929
+    },
+    {
+      "product_id": "1783114185",
+      "title": "Сумка Accessories In Plain Paper Touch Mixed",
+      "root_rank": 6,
+      "root_final_score": 3.827568,
+      "second_rank": 6,
+      "second_final_score": 3.880026
+    },
+    {
+      "product_id": "1783114329",
+      "title": "Мужские Шорты Bermuda Cargo In Chrome - R",
+      "root_rank": 3,
+      "root_final_score": 4.010051,
+      "second_rank": 3,
+      "second_final_score": 4.048363
+    },
+    {
+      "product_id": "1783114353",
+      "title": "Мужские Шорты Micro-reps Boxy Lens",
+      "root_rank": 2,
+      "root_final_score": 4.174829,
+      "second_rank": 2,
+      "second_final_score": 4.195453
+    },
+    {
+      "product_id": "1783114817",
+      "title": "Мужская Куртка Flatt Nylon Goggle",
+      "root_rank": 4,
+      "root_final_score": 4.000249,
+      "second_rank": 4,
+      "second_final_score": 3.970537
+    },
+    {
+      "product_id": "1783114849",
+      "title": "Мужская Куртка Flatt Nylon Mixed Hooded Lens",
+      "root_rank": 16,
+      "root_final_score": 3.39285,
+      "second_rank": 15,
+      "second_final_score": 3.43584
+    },
+    {
+      "product_id": "1783115025",
+      "title": "Мужская Рубашка In 50 Fili",
+      "root_rank": 8,
+      "root_final_score": 3.805895,
+      "second_rank": 7,
+      "second_final_score": 3.846708
+    },
+    {
+      "product_id": "1783115057",
+      "title": "Мужская Рубашка In Broken Twill",
+      "root_rank": 18,
+      "root_final_score": 3.377543,
+      "second_rank": 14,
+      "second_final_score": 3.457982
+    },
+    {
+      "product_id": "1783115105",
+      "title": "Мужская Рубашка In Popeline",
+      "root_rank": 12,
+      "root_final_score": 3.534592,
+      "second_rank": 11,
+      "second_final_score": 3.573102
+    },
+    {
+      "product_id": "1783115377",
+      "title": "Мужская Толстовка Open In Diagonal Fleece",
+      "root_rank": 5,
+      "root_final_score": 3.916164,
+      "second_rank": 5,
+      "second_final_score": 3.958238
+    },
+    {
+      "product_id": "1783115737",
+      "title": "Мужская Футболка In 1020 Jersey",
+      "root_rank": 20,
+      "root_final_score": 3.326426,
+      "second_rank": 16,
+      "second_final_score": 3.37378
+    },
+    {
+      "product_id": "1783115769",
+      "title": "Мужская Футболка In 20/1 Jersey",
+      "root_rank": 9,
+      "root_final_score": 3.805895,
+      "second_rank": 8,
+      "second_final_score": 3.846708
+    },
+    {
+      "product_id": "1783128473",
+      "title": "Кроссовки Xt-whisper",
+      "root_rank": 11,
+      "root_final_score": 3.535079,
+      "second_rank": 9,
+      "second_final_score": 3.626369
+    },
+    {
+      "product_id": "1783130753",
+      "title": "Платье Shade Tied Jade",
+      "root_rank": 7,
+      "root_final_score": 3.821723,
+      "second_rank": 19,
+      "second_final_score": 3.265131
+    },
+    {
+      "product_id": "1791655489",
+      "title": "Лоферы Easy Weejun Lincoln G.H. Bass X Pop Trading Company",
+      "root_rank": 13,
+      "root_final_score": 3.418788,
+      "second_rank": 13,
+      "second_final_score": 3.461416
+    },
+    {
+      "product_id": "1791664113",
+      "title": "Кроссовки Sella Lite",
+      "root_rank": 10,
+      "root_final_score": 3.545835,
+      "second_rank": 10,
+      "second_final_score": 3.59032
+    }
+  ]
+}
